@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "FemtoSynthesizer.h"
 
 //==============================================================================
 /**
@@ -55,5 +56,7 @@ public:
 
 private:
 	//==============================================================================
+	FemtoSynthesizer* synth;
+
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FemtoAudioProcessor)
 };

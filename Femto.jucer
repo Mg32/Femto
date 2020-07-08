@@ -5,6 +5,31 @@
               pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
               displaySplashScreen="0">
   <MAINGROUP id="coofZY" name="Femto">
+    <GROUP id="{A0002B7C-D069-8844-594C-7F08EBA204B3}" name="Core">
+      <FILE id="ZibKPi" name="CoreEnvelope.cpp" compile="1" resource="0"
+            file="Source/CoreEnvelope.cpp"/>
+      <FILE id="f1bPtl" name="CoreEnvelope.h" compile="0" resource="0" file="Source/CoreEnvelope.h"/>
+      <FILE id="BfHyoR" name="CoreNoise.cpp" compile="1" resource="0" file="Source/CoreNoise.cpp"/>
+      <FILE id="pWIrOF" name="CoreNoise.h" compile="0" resource="0" file="Source/CoreNoise.h"/>
+      <FILE id="bz5Nmr" name="CorePSG.cpp" compile="1" resource="0" file="Source/CorePSG.cpp"/>
+      <FILE id="icYV1O" name="CorePSG.h" compile="0" resource="0" file="Source/CorePSG.h"/>
+      <FILE id="LfbZ5I" name="CorePulse.cpp" compile="1" resource="0" file="Source/CorePulse.cpp"/>
+      <FILE id="DBWWvw" name="CorePulse.h" compile="0" resource="0" file="Source/CorePulse.h"/>
+    </GROUP>
+    <GROUP id="{4B315C31-C416-D044-49BB-328CE817BB9B}" name="Synth">
+      <FILE id="SDrXYb" name="FemtoSynthesizer.cpp" compile="1" resource="0"
+            file="Source/FemtoSynthesizer.cpp"/>
+      <FILE id="Ewd1pL" name="FemtoSynthesizer.h" compile="0" resource="0"
+            file="Source/FemtoSynthesizer.h"/>
+      <FILE id="HKt3wk" name="FemtoSynthSound.cpp" compile="1" resource="0"
+            file="Source/FemtoSynthSound.cpp"/>
+      <FILE id="Eh1GTu" name="FemtoSynthSound.h" compile="0" resource="0"
+            file="Source/FemtoSynthSound.h"/>
+      <FILE id="KqyUFd" name="FemtoSynthVoice.cpp" compile="1" resource="0"
+            file="Source/FemtoSynthVoice.cpp"/>
+      <FILE id="n1BQUc" name="FemtoSynthVoice.h" compile="0" resource="0"
+            file="Source/FemtoSynthVoice.h"/>
+    </GROUP>
     <GROUP id="{5315760A-9FD0-FDBA-ABE0-5EF5B1061D84}" name="Source">
       <FILE id="DA2VcW" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
