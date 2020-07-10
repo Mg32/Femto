@@ -23,6 +23,14 @@ FemtoAudioProcessor::FemtoAudioProcessor()
 #endif
 {
 	synth = new FemtoSynthesizer(*this);
+
+	// parameters
+	addParameter(gain = new juce::AudioParameterFloat(
+		"gain",
+		"Gain",
+		juce::NormalisableRange<float>(0.0f, 1.0f),
+		1.0f
+	));
 }
 
 FemtoAudioProcessor::~FemtoAudioProcessor()
@@ -138,12 +146,13 @@ void FemtoAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
 		buffer.clear(i, 0, buffer.getNumSamples());
 
 	synth->renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+	buffer.applyGain(*gain);
 }
 
 //==============================================================================
 bool FemtoAudioProcessor::hasEditor() const
 {
-	return true; // (change this to false if you choose to not supply an editor)
+	return false; // (change this to false if you choose to not supply an editor)
 }
 
 juce::AudioProcessorEditor* FemtoAudioProcessor::createEditor()
@@ -156,7 +165,12 @@ void FemtoAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
 	juce::XmlElement root("State");
 
-	// TODO: parameter serialization
+
+	for (int i = 0; i < getNumParameters(); i++)
+	{
+		juce::XmlElement* el = root.createNewChildElement(getParameterName(i));
+		el->addTextElement(juce::String(getParameter(i)));
+	}
 
 	copyXmlToBinary(root, destData);
 }
@@ -171,7 +185,14 @@ void FemtoAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 
 	forEachXmlChildElement((*root), child)
 	{
-		// TODO: parameter deserialization
+		for (int i = 0; i < getNumParameters(); i++)
+		{
+			if (!child->hasTagName(getParameterName(i)))
+				continue;
+
+			juce::String text = child->getAllSubText();
+			setParameter(i, text.getFloatValue());
+		}
 	}
 }
 
