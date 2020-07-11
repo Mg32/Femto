@@ -56,9 +56,10 @@ public:
 
 private:
 	//==============================================================================
-	FemtoSynthesizer* synth;
+	std::unique_ptr<FemtoSynthesizer> synth;
 
-	juce::AudioParameterFloat* gain;
+	juce::AudioProcessorValueTreeState parameters;
+	std::atomic<float>* gainParameter = nullptr;
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FemtoAudioProcessor)
 };

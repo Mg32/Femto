@@ -21,21 +21,17 @@ FemtoAudioProcessor::FemtoAudioProcessor()
 #endif
 	)
 #endif
+	, parameters(*this, nullptr, juce::Identifier("APVTS_Femto"), {
+			std::make_unique<juce::AudioParameterFloat>("gain", "Gain", 0.0f, 1.0f, 0.8f),
+		})
 {
-	synth = new FemtoSynthesizer(*this);
+	synth = std::make_unique<FemtoSynthesizer>(*this);
 
-	// parameters
-	addParameter(gain = new juce::AudioParameterFloat(
-		"gain",
-		"Gain",
-		juce::NormalisableRange<float>(0.0f, 1.0f),
-		1.0f
-	));
+	gainParameter = parameters.getRawParameterValue("gain");
 }
 
 FemtoAudioProcessor::~FemtoAudioProcessor()
 {
-	delete synth;
 }
 
 //==============================================================================
@@ -146,7 +142,7 @@ void FemtoAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
 		buffer.clear(i, 0, buffer.getNumSamples());
 
 	synth->renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-	buffer.applyGain(*gain);
+	buffer.applyGain(*gainParameter);
 }
 
 //==============================================================================
@@ -163,37 +159,19 @@ juce::AudioProcessorEditor* FemtoAudioProcessor::createEditor()
 //==============================================================================
 void FemtoAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
-	juce::XmlElement root("State");
-
-
-	for (int i = 0; i < getNumParameters(); i++)
-	{
-		juce::XmlElement* el = root.createNewChildElement(getParameterName(i));
-		el->addTextElement(juce::String(getParameter(i)));
-	}
-
-	copyXmlToBinary(root, destData);
+	auto root = parameters.state.createXml();
+	copyXmlToBinary(*root, destData);
 }
 
 void FemtoAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
 	auto root = getXmlFromBinary(data, sizeInBytes);
-	if (!root)
+	if (!root || !root->hasTagName(parameters.state.getType()))
 	{
 		return;
 	}
 
-	forEachXmlChildElement((*root), child)
-	{
-		for (int i = 0; i < getNumParameters(); i++)
-		{
-			if (!child->hasTagName(getParameterName(i)))
-				continue;
-
-			juce::String text = child->getAllSubText();
-			setParameter(i, text.getFloatValue());
-		}
-	}
+	parameters.state = juce::ValueTree::fromXml(*root);
 }
 
 //==============================================================================
