@@ -17,6 +17,8 @@
       <FILE id="DBWWvw" name="CorePulse.h" compile="0" resource="0" file="Source/CorePulse.h"/>
     </GROUP>
     <GROUP id="{4B315C31-C416-D044-49BB-328CE817BB9B}" name="Synth">
+      <FILE id="aDipo8" name="FemtoParameterDefinition.h" compile="0" resource="0"
+            file="Source/FemtoParameterDefinition.h"/>
       <FILE id="SDrXYb" name="FemtoSynthesizer.cpp" compile="1" resource="0"
             file="Source/FemtoSynthesizer.cpp"/>
       <FILE id="Ewd1pL" name="FemtoSynthesizer.h" compile="0" resource="0"

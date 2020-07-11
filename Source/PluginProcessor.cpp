@@ -9,6 +9,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+#include "FemtoParameterDefinition.h"
+
 //==============================================================================
 FemtoAudioProcessor::FemtoAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -22,12 +24,30 @@ FemtoAudioProcessor::FemtoAudioProcessor()
 	)
 #endif
 	, parameters(*this, nullptr, juce::Identifier("APVTS_Femto"), {
-			std::make_unique<juce::AudioParameterFloat>("gain", "Gain", 0.0f, 1.0f, 0.8f),
+			std::make_unique<juce::AudioParameterFloat>(paramdefs::kGainId, "Gain", 0.0f, 1.0f, 0.8f),
+			std::make_unique<juce::AudioParameterChoice>(paramdefs::kClockFrequencyId, "Clock freq.", juce::StringArray({ "1.7897725 MHz", "2 MHz" }), 0),
+			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnablePulseChAId, "Enable Pulse Ch.A", true),
+			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnablePulseChBId, "Enable Pulse Ch.B", false),
+			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnablePulseChCId, "Enable Pulse Ch.C", false),
+			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnableNoiseChAId, "Enable Noise Ch.A", false),
+			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnableNoiseChBId, "Enable Noise Ch.B", false),
+			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnableNoiseChCId, "Enable Noise Ch.C", false),
+			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnableEnvelopeChAId, "Enable Env Ch.A", false),
+			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnableEnvelopeChBId, "Enable Env Ch.B", false),
+			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnableEnvelopeChCId, "Enable Env Ch.C", false),
+			std::make_unique<juce::AudioParameterInt>(paramdefs::kVolumeChAId, "Volume Ch.A", 0, 15, 15),
+			std::make_unique<juce::AudioParameterInt>(paramdefs::kVolumeChBId, "Volume Ch.B", 0, 15, 15),
+			std::make_unique<juce::AudioParameterInt>(paramdefs::kVolumeChCId, "Volume Ch.C", 0, 15, 15),
+			std::make_unique<juce::AudioParameterInt>(paramdefs::kNoisePeriodId, "Noise Period", 1, 31, 15),
+			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnvelopeCNTId, "Env CNT", false),
+			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnvelopeATTId, "Env ATT", false),
+			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnvelopeALTId, "Env ALT", false),
+			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnvelopeHLDId, "Env HLD", false),
 		})
 {
 	synth = std::make_unique<FemtoSynthesizer>(parameters);
 
-	gainParameter = parameters.getRawParameterValue("gain");
+	gainParameter = parameters.getRawParameterValue(paramdefs::kGainId);
 }
 
 FemtoAudioProcessor::~FemtoAudioProcessor()
