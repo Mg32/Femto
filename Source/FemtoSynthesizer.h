@@ -15,6 +15,6 @@
 class FemtoSynthesizer : public juce::Synthesiser
 {
 public:
-	FemtoSynthesizer(juce::AudioProcessor&);
+	FemtoSynthesizer(juce::AudioProcessorValueTreeState& parameters);
 	~FemtoSynthesizer();
 };

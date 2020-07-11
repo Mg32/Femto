@@ -12,10 +12,10 @@
 #include "FemtoSynthSound.h"
 #include "FemtoSynthVoice.h"
 
-FemtoSynthesizer::FemtoSynthesizer(juce::AudioProcessor& p)
+FemtoSynthesizer::FemtoSynthesizer(juce::AudioProcessorValueTreeState& parameters)
 {
 	clearVoices();
-	addVoice(new FemtoSynthVoice());
+	addVoice(new FemtoSynthVoice(parameters));
 
 	clearSounds();
 	addSound(new FemtoSynthSound());

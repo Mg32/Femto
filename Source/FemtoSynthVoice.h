@@ -16,9 +16,7 @@
 class FemtoSynthVoice : public juce::SynthesiserVoice
 {
 public:
-	std::unique_ptr<CorePSG> generator;
-
-	FemtoSynthVoice()
+	FemtoSynthVoice(juce::AudioProcessorValueTreeState& parameters)
 	{
 		generator = std::make_unique<CorePSG>();
 		generator->setSampleRate(this->getSampleRate());
@@ -33,4 +31,5 @@ public:
 	void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override;
 
 private:
+	std::unique_ptr<CorePSG> generator;
 };

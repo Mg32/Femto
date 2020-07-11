@@ -25,7 +25,7 @@ FemtoAudioProcessor::FemtoAudioProcessor()
 			std::make_unique<juce::AudioParameterFloat>("gain", "Gain", 0.0f, 1.0f, 0.8f),
 		})
 {
-	synth = std::make_unique<FemtoSynthesizer>(*this);
+	synth = std::make_unique<FemtoSynthesizer>(parameters);
 
 	gainParameter = parameters.getRawParameterValue("gain");
 }
