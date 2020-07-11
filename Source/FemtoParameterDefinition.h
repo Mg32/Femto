@@ -29,6 +29,7 @@ namespace paramdefs
 	static const char* kVolumeChBId = "VolChB";
 	static const char* kVolumeChCId = "VolChC";
 	static const char* kNoisePeriodId = "NoisePeriod";
+	static const char* kEnvelopePeriodId = "EnvPeriod";
 	static const char* kEnvelopeCNTId = "EnvCNT";
 	static const char* kEnvelopeATTId = "EnvATT";
 	static const char* kEnvelopeALTId = "EnvALT";
@@ -36,8 +37,8 @@ namespace paramdefs
 
 	// Clock Frequency
 	static const size_t kNumClockFrequencies = 2;
-	static const float kClockFrequencies[kNumClockFrequencies] = {
-		1.7897725e6f,
-		2e6f,
+	static const double kClockFrequencies[kNumClockFrequencies] = {
+		1.7897725e6,
+		2e6,
 	};
 }

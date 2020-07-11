@@ -39,6 +39,7 @@ FemtoAudioProcessor::FemtoAudioProcessor()
 			std::make_unique<juce::AudioParameterInt>(paramdefs::kVolumeChBId, "Volume Ch.B", 0, 15, 15),
 			std::make_unique<juce::AudioParameterInt>(paramdefs::kVolumeChCId, "Volume Ch.C", 0, 15, 15),
 			std::make_unique<juce::AudioParameterInt>(paramdefs::kNoisePeriodId, "Noise Period", 1, 31, 15),
+			std::make_unique<juce::AudioParameterInt>(paramdefs::kEnvelopePeriodId, "Env Period", 1, 0xffff, 0x800),
 			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnvelopeCNTId, "Env CNT", false),
 			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnvelopeATTId, "Env ATT", false),
 			std::make_unique<juce::AudioParameterBool>(paramdefs::kEnvelopeALTId, "Env ALT", false),

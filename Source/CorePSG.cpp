@@ -166,7 +166,7 @@ void CorePSG::setPulseFrequency(Channel channel, double frequency)
 	}
 }
 
-void CorePSG::setPulseChannelEnabled(Channel channel, bool isEnabled)
+void CorePSG::setPulseEnabled(Channel channel, bool isEnabled)
 {
 	switch (channel)
 	{
@@ -184,7 +184,7 @@ void CorePSG::setPulseChannelEnabled(Channel channel, bool isEnabled)
 	}
 }
 
-void CorePSG::setNoiseChannelEnabled(Channel channel, bool isEnabled)
+void CorePSG::setNoiseEnabled(Channel channel, bool isEnabled)
 {
 	switch (channel)
 	{
@@ -202,7 +202,7 @@ void CorePSG::setNoiseChannelEnabled(Channel channel, bool isEnabled)
 	}
 }
 
-void CorePSG::setEnableEnvelope(Channel channel, bool isEnabled)
+void CorePSG::setEnvelopeEnabled(Channel channel, bool isEnabled)
 {
 	envelope.reset();
 	switch (channel)

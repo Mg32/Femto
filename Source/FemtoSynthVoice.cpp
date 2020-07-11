@@ -51,3 +51,54 @@ void FemtoSynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, in
 		}
 	}
 }
+
+void FemtoSynthVoice::Listener::parameterChanged(const juce::String& parameterID, float newValue)
+{
+	if (parameterID == paramdefs::kClockFrequencyId)
+	{
+		double freq = paramdefs::kClockFrequencies[static_cast<int>(newValue)];
+		generator.setClockFrequency(freq);
+	}
+
+	if (parameterID == paramdefs::kEnablePulseChAId)
+		generator.setPulseEnabled(CorePSG::Channel::ChannelA, static_cast<bool>(newValue));
+	if (parameterID == paramdefs::kEnablePulseChBId)
+		generator.setPulseEnabled(CorePSG::Channel::ChannelB, static_cast<bool>(newValue));
+	if (parameterID == paramdefs::kEnablePulseChCId)
+		generator.setPulseEnabled(CorePSG::Channel::ChannelC, static_cast<bool>(newValue));
+
+	if (parameterID == paramdefs::kEnableNoiseChAId)
+		generator.setNoiseEnabled(CorePSG::Channel::ChannelA, static_cast<bool>(newValue));
+	if (parameterID == paramdefs::kEnablePulseChBId)
+		generator.setNoiseEnabled(CorePSG::Channel::ChannelB, static_cast<bool>(newValue));
+	if (parameterID == paramdefs::kEnablePulseChCId)
+		generator.setNoiseEnabled(CorePSG::Channel::ChannelC, static_cast<bool>(newValue));
+
+	if (parameterID == paramdefs::kEnableEnvelopeChAId)
+		generator.setEnvelopeEnabled(CorePSG::Channel::ChannelA, static_cast<bool>(newValue));
+	if (parameterID == paramdefs::kEnableEnvelopeChBId)
+		generator.setEnvelopeEnabled(CorePSG::Channel::ChannelB, static_cast<bool>(newValue));
+	if (parameterID == paramdefs::kEnableEnvelopeChCId)
+		generator.setEnvelopeEnabled(CorePSG::Channel::ChannelC, static_cast<bool>(newValue));
+
+	if (parameterID == paramdefs::kVolumeChAId)
+		generator.setChannelVolume(CorePSG::Channel::ChannelA, static_cast<int>(newValue));
+	if (parameterID == paramdefs::kVolumeChBId)
+		generator.setChannelVolume(CorePSG::Channel::ChannelB, static_cast<int>(newValue));
+	if (parameterID == paramdefs::kVolumeChCId)
+		generator.setChannelVolume(CorePSG::Channel::ChannelC, static_cast<int>(newValue));
+
+	if (parameterID == paramdefs::kNoisePeriodId)
+		generator.setNoisePeriod(static_cast<int>(newValue));
+	if (parameterID == paramdefs::kEnvelopePeriodId)
+		generator.setEnvelopePeriod(static_cast<int>(newValue));
+
+	if (parameterID == paramdefs::kEnvelopeCNTId)
+		generator.setEnvelopeIsContinued(static_cast<bool>(newValue));
+	if (parameterID == paramdefs::kEnvelopeATTId)
+		generator.setEnvelopeIsAttenuated(static_cast<bool>(newValue));
+	if (parameterID == paramdefs::kEnvelopeALTId)
+		generator.setEnvelopeIsAlternated(static_cast<bool>(newValue));
+	if (parameterID == paramdefs::kEnvelopeHLDId)
+		generator.setEnvelopeIsHolded(static_cast<bool>(newValue));
+}

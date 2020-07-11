@@ -27,9 +27,9 @@ public:
 	void noteOff(Channel channel);
 
 	void setPulseFrequency(Channel channel, double frequency);
-	void setPulseChannelEnabled(Channel channel, bool isEnabled);
-	void setNoiseChannelEnabled(Channel channel, bool isEnabled);
-	void setEnableEnvelope(Channel channel, bool isEnabled);
+	void setPulseEnabled(Channel channel, bool isEnabled);
+	void setNoiseEnabled(Channel channel, bool isEnabled);
+	void setEnvelopeEnabled(Channel channel, bool isEnabled);
 	void setChannelVolume(Channel channel, int32_t volume);
 
 	void setPitchBend(double factor) { pitchBendFactor = factor; }
