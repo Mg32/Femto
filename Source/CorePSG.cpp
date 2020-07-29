@@ -12,6 +12,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <limits>
+#include <algorithm>
 
 namespace
 {
@@ -20,13 +21,13 @@ namespace
 		if (freq < 1)
 			return 0xfff;
 
-		int32_t p = round(simulationFs / 2 / freq);
+		int32_t period = round(simulationFs / 2 / freq);
 
-		if (p < 1)
-			p = 1;
-		if (p > 0xfff)
-			p = 0xfff;
-		return p;
+		if (period < 1)
+			period = 1;
+		if (period > 0xfff)
+			period = 0xfff;
+		return period;
 	}
 
 	double volumeToAmplitude(int32_t internalVolume)
@@ -36,6 +37,13 @@ namespace
 		if (internalVolume >= 31)
 			return 1;
 		return pow(2, ((double)internalVolume - 31) / 4);
+	}
+
+	double sinc(double x)
+	{
+		constexpr double eps = std::numeric_limits<double>::epsilon();
+		const double theta = M_PI * x + eps;
+		return sin(theta) / theta;
 	}
 };
 
@@ -93,22 +101,31 @@ double CorePSG::renderNextSample()
 	}
 	time -= samplesToGenerate;
 
-	// rough interpolation
+	// sinc interpolation
 	double interpolated = 0;
-	double denominator = 0;
-	for (int32_t j = 0; j < floor(2 * timeShift); j++)
+	for (int j = 0; j < kCircularBufferSize; j++)
 	{
-		// triangular weighting
-		const double x = ((double)j - time) / timeShift + 1;
-		const double weight = (x > 1 || x < -1) ? 0 : (1 - fabs(x));
+		const double pos = static_cast<double>(j) - kHalfBufferSize + time;
+		
+		const double tableIndexReal = pos / kHalfBufferSize * kWeightTableMax;
+		int32_t tableIndex = floor(tableIndexReal);
+		double tableDelta = tableIndexReal - tableIndex;
+		if (tableIndex < 0)
+		{
+			tableIndex = -tableIndex;
+			tableDelta = 1 - tableDelta;
+		}
+		if (tableIndex + 1 > kWeightTableMax)
+		{
+			continue;
+		}
 
-		// weighted mean
-		interpolated += weight * circularBuffer[(kCircularBufferSize + head - j) % kCircularBufferSize];
-		denominator += weight;
+		const int32_t bufferPosition = (kCircularBufferSize + head - j) % kCircularBufferSize;
+		const double weight = (1 - tableDelta) * weightTable[tableIndex] + tableDelta * weightTable[tableIndex + 1];
+		interpolated += weight * circularBuffer[bufferPosition];
 	}
-	double output = interpolated / denominator;
 
-	return output;
+	return interpolated;
 }
 
 void CorePSG::noteOn(Channel channel)
@@ -236,5 +253,26 @@ void CorePSG::setChannelVolume(Channel channel, int32_t volume)
 	case Channel::ChannelC:
 		volumeC = volume;
 		break;
+	}
+}
+
+void CorePSG::updateWeightTable()
+{
+	const double factor = std::min(outputFs / simulationFs, 1.0);
+
+	for (int32_t i = 0; i < kWeightTableSize; i++)
+	{
+		const double x = static_cast<double>(i) / kWeightTableMax;
+		const double t = factor * kHalfBufferSize * x;
+
+		const double theta = M_PI * x;
+		const double window = 0.42 + 0.5 * cos(theta) + 0.08 * cos(2 * theta);
+
+		weightTable[i] = factor * sinc(t) * window;
+		if (theta > M_PI || theta < -M_PI)
+		{
+			// out of window
+			weightTable[i] = 0;
+		}
 	}
 }

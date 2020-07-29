@@ -16,10 +16,15 @@
 class CorePSG
 {
 public:
+	CorePSG()
+	{
+		updateWeightTable();
+	}
+
 	double renderNextSample();
 
-	void setSampleRate(double frequency) { outputFs = frequency; }
-	void setClockFrequency(double frequency) { simulationFs = 2 * frequency / 16; }
+	void setSampleRate(double frequency) { outputFs = frequency; updateWeightTable(); }
+	void setClockFrequency(double frequency) { simulationFs = 2 * frequency / 16; updateWeightTable(); }
 
 	enum class Channel { ChannelA, ChannelB, ChannelC };
 
@@ -86,8 +91,14 @@ private:
 	bool isHolded = false;
 
 	// interpolation
-	static const int32_t kCircularBufferSize = 64;
+	static const int32_t kHalfBufferSize = 63;
+	static const int32_t kCircularBufferSize = 2 * kHalfBufferSize + 1;
+	static const int32_t kWeightTableMax = 16384;
+	static const int32_t kWeightTableSize = 1 + kWeightTableMax;
 	double circularBuffer[kCircularBufferSize] = { };
+	double weightTable[kWeightTableSize] = { };
 	int32_t head = 0;
 	double time = 0;
+
+	void updateWeightTable();
 };
